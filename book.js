@@ -16,9 +16,9 @@ const app = express();
 app.use(express.static('abc'));
 
 
-app.listen(8084,function(){
+app.listen(8086,function(){
 
-console.log("server listening port.......8083");
+console.log("server listening port.......8086");
 
 })
 
@@ -27,9 +27,9 @@ app.get('/booksinserted', function (req, res) {
     
     let input={bookid:req.query.bookid,bookname:req.query.bookname,price:req.query.price};
 
-    let output={status:false};
+    let output=false;
 
-    connection.query('insert into book value(?,?,?)',[input.bookid,input.bookname,input.price],
+    connection.query('insert into book values(?,?,?)',[input.bookid,input.bookname,input.price],
     (err,rows)=>{
         if(err)
         {
@@ -40,7 +40,7 @@ app.get('/booksinserted', function (req, res) {
         {
             if(rows.affectedRows>0)
             {
-                output.status=true;
+                output=true;
                 console.log(rows[0]);
                 output.bookdetails=rows[0];
 
@@ -56,35 +56,17 @@ app.get('/booksinserted', function (req, res) {
 
 //booksdetails
     app.get('/booksdetails', function (req, res) {
-    
-        let input=req.query.bookid;
-    
-        let output={status1:false,bookdetails:{bookid:0,bookname:"",price:0}};
-    
-        connection.query('select  bookname,price from  book where bookid=?',[bookid],
-        (err,rows)=>{
-            if(err)
-            {
-                console.log(err);
-    
-            }
-            else
-            {
-                if(rows.affectedRows>0)
-                {
-                    output.status1=true;
-                    console.log(rows[0]);
-                    output.bookdetails=rows[0];
-    
-                }
-    
-            }
-            res.send(output);
-    
-    
+          connection.query('select * from book',[],
+          (err,rows)=>{      
+            res.send(rows);
         });
+
+    });
+
+
+        
     
-        });
+     
 
 
 

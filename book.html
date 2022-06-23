@@ -10,77 +10,61 @@
 $(()=>{
 
   
+    function showContent() {
+				let books = [];
 
-console.log("hello world");
-$("#bookid").blur(()=>{
+				let input = {};
+				let ajax = {
+					data: input,
+					url: "http://localhost:8086/booksdetails",
+					type: 'get',
+					dataType: 'json',
+					success: (data) => {
+						books = data;
+						let content = "";
+						for (let i = 0; i < books.length; i++) {
+							content += '<br>' + books[i].bookid + " " + books[i].bookname + " " + books[i].price;
+						}
+						$("#showbooks").html(content);
+					},
+					error: (error) => {
+						console.log(error);
+					}
+				};
+				$.ajax(ajax);
+			}
 
-    let input={bookid:$("#bookid").val()};
-    let ajax={
-data:input,
-url:"http://localhost:8084/booksdetails",
-type:"get",
-dataType:"json",
-success:(data)=>{
-if(data.status==true)
-{
+			showContent();
 
-    $("#bookname").val(data.bookdetails.bookname);
-    $("#price").val(data.bookdetails.price);
-    $("#msg").html("Book details found");
-}
-else{
 
-    $("#bookname").val("");
-    $("#price").val("");
-    $("#msg").html("Book details not  found");
+            $("#add").click(() => {
 
-}
+let input = { bookid: $("#bookid").val(), bookname: $("#bookname").val(), price: $("#price").val() };
 
-},
-error:(error)=>
-    {
-console.log(error)
-
+let paramter = {
+    data: input,
+    url: "http://localhost:8086/booksinserted",
+    type: 'get',
+    dataType: 'json',
+    success: (data) => {
+        if (dataRecieved === true) {
+            $("#message").text("Book Added Successfully");
+        }
+        else {
+            $("#message").text("Book not added");
+        }
+        showContent();
+    },
+    error: (error) => {
+        console.log(error);
     }
-    }
-    $.ajax(ajax);
+};
+
+$.ajax(parameter);
+});
 
 });
 
-
-
-$("#add").click(()=>{
-
-let input={bookid:$("#bookid").val(),bookname:$("#bookname").val(),price:("#price").val()};
-let paramter={
-data:input,
-url:"http://localhost:8084/booksinserted",
-type:"get",
-dataType:"json",
-success:(data)=>{
-if(data.status1==true)
-{
-    $("#msg").html("Books inserted");
-
-}
-else
-{
-    $("#msg").html(" cannot inserted Books ");
-}
-
-},
-error:(error)=>
-{
-console.log(error)
-
-}
-}
-$.ajax(paramter);
-
-});
-
-
-});
 </script>
         
 </head>
