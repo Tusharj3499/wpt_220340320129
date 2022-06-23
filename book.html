@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <script src="jquery-3.5.1.min.js"></script>
+    <script>
+$(()=>{
+
+  
+
+console.log("hello world");
+$("#bookid").blur(()=>{
+
+    let input={bookid:$("#bookid").val()};
+    let ajax={
+data:input,
+url:"http://localhost:8084/booksdetails",
+type:"get",
+dataType:"json",
+success:(data)=>{
+if(data.status==true)
+{
+
+    $("#bookname").val(data.bookdetails.bookname);
+    $("#price").val(data.bookdetails.price);
+    $("#msg").html("Book details found");
+}
+else{
+
+    $("#bookname").val("");
+    $("#price").val("");
+    $("#msg").html("Book details not  found");
+
+}
+
+},
+error:(error)=>
+    {
+console.log(error)
+
+    }
+    }
+    $.ajax(ajax);
+
+});
+
+
+
+$("#add").click(()=>{
+
+let input={bookid:$("#bookid").val(),bookname:$("#bookname").val(),price:("#price").val()};
+let paramter={
+data:input,
+url:"http://localhost:8084/booksinserted",
+type:"get",
+dataType:"json",
+success:(data)=>{
+if(data.status1==true)
+{
+    $("#msg").html("Books inserted");
+
+}
+else
+{
+    $("#msg").html(" cannot inserted Books ");
+}
+
+},
+error:(error)=>
+{
+console.log(error)
+
+}
+}
+$.ajax(paramter);
+
+});
+
+
+});
+</script>
+        
+</head>
+<body>
+   BOOK_id<input type="text" id="bookid" placeholder="bookid"><span id="message">what happen book added or not</span><br><br>
+   BOOK_Name<input type="text" id="bookname" placeholder="bookname"><br><br>
+   price<input type="text" id="price" placeholder="price"><br><br>
+
+   <input type="button" id="add" value="add a book"><br><br><hr>
+   <span id="showbooks">show all books here</span>
+</body>
+</html>
